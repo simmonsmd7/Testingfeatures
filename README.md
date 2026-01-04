@@ -43,8 +43,11 @@ Monitors Polygon blockchain for suspicious Polymarket trading patterns.
 # Full insider detection scan (recommended)
 python whale_tracker.py --insider
 
-# Scan last 6 hours for trades > $10k
-python whale_tracker.py --insider --hours 6 --min-trade 10000
+# Political/news markets only - filters out sports betting
+python whale_tracker.py --insider --political
+
+# Scan last 6 hours for trades > $10k on political markets
+python whale_tracker.py --insider --political --hours 6 --min-trade 10000
 
 # Basic scan using USDC transfers only
 python whale_tracker.py --hours 24
@@ -52,6 +55,8 @@ python whale_tracker.py --hours 24
 # Analyze a specific wallet
 python whale_tracker.py --wallet 0x1234...
 ```
+
+The `--political` flag is key for catching real insider trading like the Maduro example. Sports betting generates tons of large trades that aren't insider activity - filtering these out reveals the political/news/crypto markets where informed trading is more likely.
 
 ## Detection Patterns
 

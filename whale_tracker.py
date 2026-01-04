@@ -54,6 +54,61 @@ MIN_TRADE_SIZE = 1000  # $1,000
 # Cache for token ID to market mapping
 TOKEN_TO_MARKET_CACHE = {}
 
+# Sports-related keywords to filter out for political/news insider detection
+SPORTS_KEYWORDS = [
+    # American Football
+    "nfl", "football", "touchdown", "quarterback", "super bowl", "superbowl",
+    "patriots", "chiefs", "eagles", "cowboys", "49ers", "ravens", "bills",
+    "dolphins", "jets", "steelers", "browns", "bengals", "raiders", "broncos",
+    "chargers", "colts", "texans", "titans", "jaguars", "commanders", "giants",
+    "bears", "packers", "lions", "vikings", "saints", "falcons", "buccaneers",
+    "panthers", "cardinals", "rams", "seahawks",
+    # Basketball
+    "nba", "basketball", "lakers", "celtics", "warriors", "nets", "knicks",
+    "heat", "bucks", "76ers", "suns", "mavericks", "clippers", "nuggets",
+    "grizzlies", "pelicans", "timberwolves", "thunder", "blazers", "kings",
+    "spurs", "rockets", "jazz", "cavaliers", "pistons", "pacers", "bulls",
+    "hawks", "hornets", "magic", "wizards", "raptors",
+    # Baseball
+    "mlb", "baseball", "yankees", "red sox", "dodgers", "mets", "cubs",
+    "astros", "braves", "phillies", "padres", "mariners", "orioles", "twins",
+    "guardians", "rangers", "rays", "blue jays", "white sox", "royals",
+    "tigers", "athletics", "angels", "giants", "diamondbacks", "rockies",
+    "brewers", "cardinals", "reds", "pirates", "marlins", "nationals",
+    # Hockey
+    "nhl", "hockey", "stanley cup", "bruins", "rangers", "maple leafs",
+    "canadiens", "blackhawks", "penguins", "capitals", "lightning", "avalanche",
+    "knights", "oilers", "flames", "canucks", "kraken", "wild", "blues",
+    "predators", "stars", "hurricanes", "panthers", "devils", "islanders",
+    "flyers", "senators", "sabres", "red wings", "blue jackets", "jets",
+    "coyotes", "sharks", "ducks", "kings",
+    # Soccer
+    "soccer", "premier league", "la liga", "bundesliga", "serie a", "ligue 1",
+    "champions league", "world cup", "manchester united", "manchester city",
+    "liverpool", "chelsea", "arsenal", "tottenham", "real madrid", "barcelona",
+    "bayern", "juventus", "psg", "inter milan", "ac milan", "mls",
+    "atlético", "atletico", "paris saint-germain", "borussia", "benfica",
+    "porto", "sporting", "ajax", "feyenoord", "celtic", "rangers fc",
+    # Golf/Tennis/Boxing/MMA
+    "golf", "pga", "masters", "tennis", "wimbledon", "us open", "australian open",
+    "french open", "boxing", "ufc", "mma", "fight", "knockout",
+    # Racing
+    "nascar", "f1", "formula 1", "racing", "grand prix", "indy 500",
+    # General sports terms
+    "spread", "over/under", "moneyline", "point spread", "playoff", "playoffs",
+    "championship", "finals", "semifinals", "quarterfinals", "division",
+    "conference", "regular season", "postseason", "game 1", "game 2", "game 3",
+    "game 4", "game 5", "game 6", "game 7", "vs.", "beat the",
+]
+
+
+def is_sports_market(market_question: str) -> bool:
+    """Check if a market question is sports-related."""
+    if not market_question:
+        return False
+    question_lower = market_question.lower()
+    return any(keyword in question_lower for keyword in SPORTS_KEYWORDS)
+
 
 @dataclass
 class Trade:
@@ -256,10 +311,15 @@ def get_block_timestamp(block_num: int) -> datetime:
     return datetime.fromtimestamp(timestamp)
 
 
-def get_order_filled_trades(hours: int = 6, min_value_usd: int = 5000) -> list[dict]:
+def get_order_filled_trades(hours: int = 6, min_value_usd: int = 5000, filter_sports: bool = False) -> list[dict]:
     """
     Get actual OrderFilled trades from CTF Exchange contracts.
     This gives us the specific market and price information.
+
+    Args:
+        hours: How far back to scan
+        min_value_usd: Minimum trade size in USD
+        filter_sports: If True, exclude sports betting markets (for political/news focus)
     """
     trades = []
 
@@ -367,6 +427,10 @@ def get_order_filled_trades(hours: int = 6, min_value_usd: int = 5000) -> list[d
                 # Get market info
                 market_info = get_market_for_token(token_id)
                 market_question = market_info.get("question", f"Token {token_id[:20]}...") if market_info else f"Token {token_id[:20]}..."
+
+                # Filter out sports markets if requested
+                if filter_sports and is_sports_market(market_question):
+                    continue
 
                 trades.append({
                     "tx_hash": log.get("transactionHash", ""),
@@ -618,7 +682,7 @@ def detect_price_clustering(trades: list[dict]) -> bool:
     return True
 
 
-def scan_for_insiders(hours: int = 6, min_trade: int = 5000) -> dict:
+def scan_for_insiders(hours: int = 6, min_trade: int = 5000, political_only: bool = False) -> dict:
     """
     Full insider detection scan - tracks actual market positions.
 
@@ -627,13 +691,20 @@ def scan_for_insiders(hours: int = 6, min_trade: int = 5000) -> dict:
     - Concentrated positions (80%+ in one market)
     - Price clustering (accumulation at similar prices)
     - Large single trades
+
+    Args:
+        hours: How far back to scan
+        min_trade: Minimum trade size in USD
+        political_only: If True, filter out sports markets to focus on political/news
     """
     print(f"INSIDER DETECTION SCAN")
+    if political_only:
+        print(f"MODE: Political/News markets only (sports filtered out)")
     print(f"Scanning last {hours} hours for trades >= ${min_trade:,}")
     print()
 
     # Get actual OrderFilled trades with market info
-    trades = get_order_filled_trades(hours=hours, min_value_usd=min_trade)
+    trades = get_order_filled_trades(hours=hours, min_value_usd=min_trade, filter_sports=political_only)
 
     if not trades:
         print("No trades found in the specified time range.")
@@ -992,6 +1063,7 @@ if __name__ == "__main__":
 Examples:
   python whale_tracker.py --insider               # Full insider detection scan
   python whale_tracker.py --insider --hours 12    # Scan last 12 hours
+  python whale_tracker.py --insider --political   # Political/news markets only (no sports)
   python whale_tracker.py --hours 6               # Basic whale scan (USDC transfers)
   python whale_tracker.py --wallet 0x123...       # Analyze specific wallet
         """
@@ -1000,6 +1072,7 @@ Examples:
     parser.add_argument("--min-trade", type=int, default=5000, help="Minimum trade size in USD (default: 5000)")
     parser.add_argument("--wallet", type=str, help="Analyze a specific wallet address")
     parser.add_argument("--insider", action="store_true", help="Run full insider detection (tracks actual market positions)")
+    parser.add_argument("--political", action="store_true", help="Filter out sports markets, focus on political/news/crypto (use with --insider)")
 
     args = parser.parse_args()
 
@@ -1023,7 +1096,7 @@ Examples:
 
     elif args.insider:
         # Full insider detection scan
-        results = scan_for_insiders(hours=args.hours, min_trade=args.min_trade)
+        results = scan_for_insiders(hours=args.hours, min_trade=args.min_trade, political_only=args.political)
         print_insider_report(results)
 
     else:
