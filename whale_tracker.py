@@ -311,7 +311,7 @@ def get_block_timestamp(block_num: int) -> datetime:
     return datetime.fromtimestamp(timestamp)
 
 
-def get_order_filled_trades(hours: int = 6, min_value_usd: int = 5000, filter_sports: bool = False) -> list[dict]:
+def get_order_filled_trades(hours: int = 6, min_value_usd: int = 5000, filter_sports: bool = False, uncertain_only: bool = False) -> list[dict]:
     """
     Get actual OrderFilled trades from CTF Exchange contracts.
     This gives us the specific market and price information.
@@ -320,6 +320,7 @@ def get_order_filled_trades(hours: int = 6, min_value_usd: int = 5000, filter_sp
         hours: How far back to scan
         min_value_usd: Minimum trade size in USD
         filter_sports: If True, exclude sports betting markets (for political/news focus)
+        uncertain_only: If True, only include trades at 20-80% prices (where insider info matters)
     """
     trades = []
 
@@ -430,6 +431,11 @@ def get_order_filled_trades(hours: int = 6, min_value_usd: int = 5000, filter_sp
 
                 # Filter out sports markets if requested
                 if filter_sports and is_sports_market(market_question):
+                    continue
+
+                # Filter for uncertain prices only (20-80%) - where insider info matters
+                # Trades at 95%+ or 5%- are just market resolution, not insider activity
+                if uncertain_only and (price < 0.20 or price > 0.80):
                     continue
 
                 trades.append({
@@ -682,7 +688,7 @@ def detect_price_clustering(trades: list[dict]) -> bool:
     return True
 
 
-def scan_for_insiders(hours: int = 6, min_trade: int = 5000, political_only: bool = False) -> dict:
+def scan_for_insiders(hours: int = 6, min_trade: int = 5000, political_only: bool = False, uncertain_only: bool = False) -> dict:
     """
     Full insider detection scan - tracks actual market positions.
 
@@ -696,15 +702,18 @@ def scan_for_insiders(hours: int = 6, min_trade: int = 5000, political_only: boo
         hours: How far back to scan
         min_trade: Minimum trade size in USD
         political_only: If True, filter out sports markets to focus on political/news
+        uncertain_only: If True, only show trades at 20-80% prices (real insider territory)
     """
     print(f"INSIDER DETECTION SCAN")
     if political_only:
         print(f"MODE: Political/News markets only (sports filtered out)")
+    if uncertain_only:
+        print(f"MODE: Uncertain prices only (20-80%) - filtering out market resolution")
     print(f"Scanning last {hours} hours for trades >= ${min_trade:,}")
     print()
 
     # Get actual OrderFilled trades with market info
-    trades = get_order_filled_trades(hours=hours, min_value_usd=min_trade, filter_sports=political_only)
+    trades = get_order_filled_trades(hours=hours, min_value_usd=min_trade, filter_sports=political_only, uncertain_only=uncertain_only)
 
     if not trades:
         print("No trades found in the specified time range.")
@@ -1064,6 +1073,7 @@ Examples:
   python whale_tracker.py --insider               # Full insider detection scan
   python whale_tracker.py --insider --hours 12    # Scan last 12 hours
   python whale_tracker.py --insider --political   # Political/news markets only (no sports)
+  python whale_tracker.py --insider --political --uncertain  # Best for finding real insiders
   python whale_tracker.py --hours 6               # Basic whale scan (USDC transfers)
   python whale_tracker.py --wallet 0x123...       # Analyze specific wallet
         """
@@ -1073,6 +1083,7 @@ Examples:
     parser.add_argument("--wallet", type=str, help="Analyze a specific wallet address")
     parser.add_argument("--insider", action="store_true", help="Run full insider detection (tracks actual market positions)")
     parser.add_argument("--political", action="store_true", help="Filter out sports markets, focus on political/news/crypto (use with --insider)")
+    parser.add_argument("--uncertain", action="store_true", help="Only show trades at 20-80%% prices (filters out market resolution noise)")
 
     args = parser.parse_args()
 
@@ -1096,7 +1107,7 @@ Examples:
 
     elif args.insider:
         # Full insider detection scan
-        results = scan_for_insiders(hours=args.hours, min_trade=args.min_trade, political_only=args.political)
+        results = scan_for_insiders(hours=args.hours, min_trade=args.min_trade, political_only=args.political, uncertain_only=args.uncertain)
         print_insider_report(results)
 
     else:
