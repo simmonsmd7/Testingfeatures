@@ -1,122 +1,172 @@
-# Task: Grey Hat SaaS Opportunity Research
+# Task: Grey Hat Software Opportunity Research
 
 ## Objective
 
-Discover truly novel, underserved SaaS opportunities that exist in legal grey areas, regulatory gaps, or markets that mainstream players avoid due to complexity, stigma, or perceived risk. Focus on opportunities with few or no existing competitors.
+Research novel grey hat software opportunities with little or no competition. These are tools that violate platform TOS but aren't illegal - where real money is being made by small teams.
 
-## Research Focus Areas
+## Proven Grey Hat Categories
 
-### 1. Regulatory Arbitrage Opportunities
-- Services legal in some jurisdictions but underserved due to complexity
-- Compliance tools for industries with fragmented/unclear regulations
-- Cross-border services exploiting regulatory differences
+### 1. Scraping & Data Resale
+- Amazon product/pricing data APIs
+- LinkedIn profile scraping for sales/recruiters
+- Real estate listing aggregation
+- Google Maps/Yelp business data extraction
+- Job posting aggregators
+- Court records / public filings databases
+- Competitor pricing monitoring
 
-### 2. Stigmatized but Legal Markets
-- Industries banks/payment processors avoid (legal cannabis, adult content creators, etc.)
-- Services for controversial but legal professions
-- Tools for grey market resellers, arbitrageurs, dropshippers
+### 2. E-commerce Exploits
+- Sneaker/GPU/PS5 checkout bots
+- Buy Box monitoring and sniping
+- Inventory checkers (Walmart, Target, Best Buy)
+- Review manipulation detection (sell to brands)
+- MAP violation tracking
+- Dropship supplier price monitors
+- Amazon hijacker alerts
 
-### 3. Automation of "Unsexy" Workflows
-- Debt collection, skip tracing, asset recovery tools
-- Reputation management/removal services
-- Competitive intelligence/OSINT automation
-- Price monitoring and dynamic repricing
+### 3. Social Media Automation
+- Instagram/TikTok/Twitter growth bots
+- Multi-account management dashboards
+- Comment/DM automation tools
+- Engagement pods as a service
+- Follower/like marketplaces
+- Content scheduling with auto-engagement
+- Shadowban detection tools
 
-### 4. Platform Policy Exploits
-- Tools that work within TOS grey areas of major platforms
-- Services helping banned/restricted accounts recover
-- Multi-account management, identity separation tools
+### 4. SEO/Marketing Grey Area
+- Private Blog Network (PBN) management
+- Backlink building/selling platforms
+- Competitor ad spy tools (Google/Meta/TikTok ads)
+- Content spinning/AI rewriting at scale
+- Rank tracking with SERP scraping
+- Negative SEO detection (or services)
+- Expired domain finders with metrics
 
-### 5. Data Brokerage & Intelligence
-- People search/background check alternatives
-- Business intelligence from public records
-- Sentiment analysis and prediction markets
+### 5. Financial/Betting Arbitrage
+- Sports betting arbitrage finders
+- Prediction market bots (Polymarket, Kalshi)
+- Crypto sniping/MEV bots
+- SEC filing parsers (faster than official feeds)
+- Options flow unusual activity alerts
+- Credit card churning optimizers
+- Bank bonus trackers
 
-### 6. Financial Grey Zones
-- Crypto payment rails for underbanked businesses
-- Invoice factoring for rejected industries
-- Alternative credit scoring for thin-file borrowers
+### 6. Account & Access Arbitrage
+- Streaming account resale/generators
+- .edu email providers (for student discounts)
+- Phone verification services (SMS)
+- Residential proxy networks
+- Account unbanning services
+- Multi-account identity management
 
-## Research Methodology
+### 7. Ticket & Reservation Bots
+- Concert/event ticket sniping
+- Restaurant reservation bots (Resy, OpenTable)
+- Appointment grabbers (DMV, visa, passport, doctor)
+- Limited drop monitors (sneakers, collectibles)
+- Waitlist position holders
 
-Each iteration should:
+### 8. Gaming & Virtual Goods
+- Game bot automation (farming, leveling)
+- Virtual currency/item marketplaces
+- Account selling platforms
+- Cheat/hack subscriptions
+- Private server hosting
 
-1. **Pick ONE unexplored angle** from the focus areas above
-2. **Search for existing solutions** - verify the gap actually exists
-3. **Identify the pain point** - why do people need this?
-4. **Assess legal risk** - is this actually legal? What jurisdictions?
-5. **Estimate market size** - who would pay and how much?
-6. **Document competitive landscape** - who else is doing this?
-7. **Rate the opportunity** (1-10) based on:
-   - Market gap (fewer competitors = higher score)
-   - Legal clarity (clearer = higher score)
-   - Monetization potential
-   - Technical feasibility
-   - Defensibility/moat potential
+## Research Mission
+
+Find opportunities where:
+1. **Gap exists** - no dominant player or existing tools suck
+2. **People pay** - proven willingness (check Fiverr, Discord, Telegram for manual services)
+3. **Defensible** - some technical moat or first-mover advantage
+4. **Bootstrappable** - solo dev can MVP in 1-3 months
+
+## Research Questions
+
+For each opportunity:
+1. **Who's paying today?** (find Discord servers, Telegram groups, Reddit threads)
+2. **What do they pay?** (actual pricing from competitors or manual services)
+3. **Who are competitors?** (find them, assess weaknesses)
+4. **What's the gap?** (why would someone switch to you?)
+5. **Technical difficulty?** (anti-bot measures, infrastructure needs)
+6. **Legal/TOS risk?** (cease & desist likelihood, account bans)
+7. **Moat?** (data accumulation, network effects, switching costs)
+
+## Scoring (1-10 each, max 70)
+
+- **Market Gap**: Less competition = higher
+- **Proven Demand**: People already paying = higher
+- **Willingness to Pay**: Higher prices = higher
+- **Technical Feasibility**: Easier to build = higher
+- **Legal Clarity**: Lower risk = higher
+- **Scalability**: Grows without linear cost = higher
+- **Defensibility**: Harder to copy = higher
 
 ## Output Format
 
-For each opportunity discovered, document in ralph.log:
+Log to ralph.log:
 
 ```
 === OPPORTUNITY: [Name] ===
-Category: [Which focus area]
-Pain Point: [What problem does this solve]
-Target Customer: [Who pays]
-Existing Competition: [List competitors or "NONE FOUND"]
-Legal Status: [Legal/Grey/Varies by jurisdiction]
-Risk Factors: [What could go wrong]
-Monetization: [How to charge, estimated pricing]
-Technical Complexity: [Low/Medium/High]
-Market Size Estimate: [TAM if possible]
-SCORE: [X/10]
-Sources: [URLs researched]
+Category: [From list above]
+Customer: [Specific persona - "Amazon FBA sellers doing $50k+/mo"]
+Pain Point: [Exact problem]
+Current Solutions: [Competitors + their weaknesses]
+Gap: [Your angle]
+Evidence of Demand: [Discord servers, Reddit complaints, Fiverr gigs]
+Pricing: [What market bears - "$97/mo" or "$0.01/query"]
+Technical Complexity: [Low/Medium/High + specifics]
+Legal Risk: [Low/Medium/High + what could happen]
+Moat: [Why hard to copy]
+
+SCORES:
+- Market Gap: X/10
+- Proven Demand: X/10
+- Willingness to Pay: X/10
+- Technical Feasibility: X/10
+- Legal Clarity: X/10
+- Scalability: X/10
+- Defensibility: X/10
+TOTAL: XX/70
+
+Notes: [Any other observations]
+---
 ```
+
+## Research Tactics
+
+- Search Reddit: r/Entrepreneur, r/SaaS, r/juststart, r/dropship, r/FulfillmentByAmazon, r/wallstreetbets, r/churning
+- Find Discord/Telegram groups where people discuss tools
+- Check what people sell on Fiverr/Upwork (manual = automation opportunity)
+- Search "[tool] alternative" or "[tool] sucks"
+- Look at AppSumo lifetime deals (signals bootstrapper markets)
+- Check Twitter/X for complaints about existing tools
+- Browse BlackHatWorld, MP Social forums
+
+## Anti-Patterns
+
+- Skip if 5+ well-funded competitors exist
+- Skip if requires enterprise sales
+- Skip if needs real-time millisecond infrastructure
+- Skip if clearly criminal (fraud, identity theft, hacking)
+- Skip if you'd need a team of 10 to build MVP
 
 ## Success Criteria
 
-- [ ] Minimum 3 opportunities documented per iteration
-- [ ] Each opportunity has verified competition research
-- [ ] Legal status is assessed (not just assumed)
-- [ ] At least one "NONE FOUND" competitor opportunity per session
-- [ ] Sources cited for all claims
-
-## Constraints
-
-- Focus on B2B SaaS, not consumer apps
-- Must be legal in at least US, EU, or major English-speaking market
-- Avoid anything requiring regulatory licenses (banking, healthcare, legal)
-- No opportunities requiring significant capital (keep bootstrappable)
-- Prefer recurring revenue models over one-time
-
-## Research Tools to Use
-
-- Web search for competitor analysis
-- Search "[industry] + software" "[problem] + SaaS" "[workflow] + automation"
-- Check Product Hunt, G2, Capterra for existing solutions
-- Search Reddit, Twitter, forums for complaints/pain points
-- Check startup databases (Crunchbase patterns)
-
-## Anti-Patterns to Avoid
-
-- Don't suggest ideas that already have 10+ funded competitors
-- Don't suggest anything requiring deep domain expertise to build
-- Don't focus on "nice to have" - find "hair on fire" problems
-- Don't suggest anything a solo dev couldn't MVP in 2-3 months
+- [ ] 3+ opportunities documented per iteration
+- [ ] At least one scores 50+/70
+- [ ] Found actual evidence of demand (links to communities/complaints)
+- [ ] Identified specific gap vs existing solutions
+- [ ] Realistic about legal risk
 
 ## When Complete
 
-After documenting opportunities, output:
-"ITERATION COMPLETE - [X] opportunities logged"
+Output: "ITERATION COMPLETE - [X] opportunities logged, top score: [XX]/70"
 
-Then exit cleanly for next iteration.
+Exit for next iteration.
 
 ---
 
-## Progress Log Reference
+## Progress Log
 
-Check `ralph.log` at start of each iteration to:
-- See what's already been researched
-- Avoid duplicate research
-- Build on previous findings
-- Identify patterns across iterations
+Check ralph.log before starting to avoid duplicate research.
